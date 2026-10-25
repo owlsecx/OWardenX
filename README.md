@@ -18,17 +18,20 @@
 
 ## 📌 Overview
 
-Vaultwarden deployment hardening auditor (offline, read-only)
+
+OWardenX is an offline, read-only host-firewall and access-control auditor covering iptables/nftables rulesets, firewalld zones and TCP wrappers. It parses saved rulesets and policy files, evaluating default policies, overly broad allow rules, exposed management ports and missing ingress restrictions. Findings are mapped to CWE and MITRE ATT&CK, scored and graded, and exported as TXT, Markdown, JSON, CSV or SARIF.
 
 ---
 
 ## ✨ Features
 
-- Parsers: .env, docker-compose, data-dir config.json
-- Admin token (plaintext / Argon2 PHC / "$$" trap), signups, TLS, SMTP, KDF, rate limits, IP_HEADER, DATABASE_URL, icon / outbound SSRF guards
-- nginx / Caddy hints, data-dir perms, backups
-- Score + grade A+…F, CWE + MITRE ATT&CK per rule
-- TXT / MD / JSON / CSV / SARIF, --demo, --fail-on
+
+- Parsers for iptables-save/nftables rulesets, firewalld zone XML and hosts.allow/hosts.deny
+- Default-policy posture checks (ACCEPT vs DROP) across INPUT/FORWARD chains and zones
+- Detection of overly broad allow rules (0.0.0.0/0) and exposed management ports (SSH, RDP, DB)
+- Missing ingress restriction and rule-ordering/shadowing analysis
+- TCP-wrappers access-control review with permissive-entry detection
+- CWE+ATT&CK mapping, offline --root trees, score/grade and TXT/MD/JSON/CSV/SARIF export
 
 ---
 
@@ -41,8 +44,13 @@ Vaultwarden deployment hardening auditor (offline, read-only)
 
 ## 🚀 Usage
 
+
 ```bash
-./OWardenX
+./OWardenX --scan -f sarif -o firewall.sarif
+./OWardenX --iptables /etc/iptables/rules.v4 --firewalld /etc/firewalld/zones
+./OWardenX -r /mnt/image --fail-on high --json
+./OWardenX --demo
+./OWardenX --help
 ```
 
 ---
